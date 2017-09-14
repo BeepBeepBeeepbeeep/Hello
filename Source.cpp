@@ -10,11 +10,13 @@ public:
 	void virtual showFigure()
 	{
 		system("cls");
+		
 		for (int i = 0;i <= height + 1;i++)
 			for (int j = 0;j <= width + 1; j++)
 			{
-				cout << ((height + 1 == i || width + 1 == j || i == 0 || j == 0) ? '#' : screen[i][j]) << ((j <= width) ? " " : "\n");
+				cout << ((height + 1 == i || width + 1 == j || i == 0 || j == 0) ? '#' : this->screen[i][j]) << ((j <= width) ? " " : "\n");
 			}
+		
 	}
 
 	void foodSpawn()
@@ -47,6 +49,7 @@ public:
 	int x[2500], y[2500];
 	char screen[2500][2500];
 	int food_x = -1, food_y = -1;
+	int count;
 protected:
 	const int height = 20, width = 30;
 };
@@ -90,7 +93,7 @@ public:
 
 	void changeDirection()
 	{
-		switch (_getch())
+		switch (getch())
 		{
 		case 'w': {this->change_x = 0;this->change_y = -1;break;}
 		case 'a': {this->change_x = -1;this->change_y = 0;break;
@@ -98,8 +101,8 @@ public:
 		case 'd': {this->change_x = 1;this->change_y = 0;break;}
 		case 's':{this->change_x = 0;this->change_y = 1;break;
 		}
-		default:
-			break;
+		default: {this->change_x = 0; this->change_y = 0;break;}
+			
 		}
 	}
 
@@ -129,6 +132,7 @@ public:
 			this->snakeSize++;
 			this->figure->food_x = -1;
 			this->figure->food_y = -1;
+			this->figure->count++;
 		}
 	}
 
@@ -145,13 +149,10 @@ int main()
 
 	while (true)
 	{
-
-		kbhit();
-		snake->changeDirection();
 		if (snake->figure->checkFood()) { snake->figure->foodSpawn(); }
-
-		snake->Move();
 		snake->figure->showFigure();
+		snake->changeDirection();
+		snake->Move();
 	}
 
 	system("pause");
