@@ -12,11 +12,18 @@ public:
 	{
 		system("cls");
 
-		for (int i = 0;i <= height + 2;i++)
+		for (int i = 0;i <= height + 1;i++)
 		{
-			for (int j = 0;j <= width + 2; j++)
+			for (int j = 0;j <= width + 1; j++)
 			{
-				cout << (((height + 1 == i) || (width + 1 == j) || (i == 0) || (j == 0)) ? '#' : this->screen[i][j]) << ((j <= width + 1) ? " " : "\n");
+				if (0 == i && ((j >= 13) && (j <= 15)))
+				{
+					cout << this->screen[i][j]<< " ";
+				}
+				else
+				{
+					cout << (((height + 1 == i) || (width + 1 == j) || (i == 0) || (j == 0)) ? '#' : this->screen[i][j]) << ((j <= width) ? " " : "\n");
+				}
 			}
 		}
 			
@@ -68,6 +75,9 @@ public:
 		this->figure->y[1] = 4;
 		this->figure->x[2] = 3;
 		this->figure->y[2] = 3;
+		this->figure->screen[0][15] = '0';
+		this->figure->screen[0][14] = '0';
+		this->figure->screen[0][13] = '0';
 		change_x = 1;
 		change_y = 0;
 	}
@@ -100,13 +110,27 @@ public:
 
 	void changeDirection()
 	{
-		switch (getch())
+		symbol = getch();
+
+		if ((symbol == 'w') || (symbol == 'W') || (symbol == 'Ö') || (symbol == 'ö'))
 		{
-		case 'w': {this->change_x = 0; this->change_y = -1;break;}
-		case 'a': {this->change_x = -1; this->change_y = 0;break;}
-		case 'd': {this->change_x = 1; this->change_y = 0;break;}
-		case 's':{this->change_x = 0; this->change_y = 1;break;}
-		default: {this->change_x = 0; this->change_y = 0;break;}
+			this->change_x = 0; this->change_y = -1;
+		}
+		else if ((symbol == 'û') || (symbol == 'Û') || (symbol == 'S') || (symbol == 's'))
+		{
+			this->change_x = 0; this->change_y = 1;
+		}
+		else if ((symbol == 'â') || (symbol == 'Â') || (symbol == 'D') || (symbol == 'd'))
+		{
+			this->change_x = 1; this->change_y = 0;
+		}
+		else if ((symbol == 'ô') || (symbol == 'Ô') || (symbol == 'A') || (symbol == 'a'))
+		{
+			this->change_x = -1; this->change_y = 0;
+		}
+		else
+		{
+			this->change_x = 0; this->change_y = 0;
 		}
 	}
 
@@ -136,6 +160,10 @@ public:
 			this->snakeSize++;
 			this->figure->food_x = -1;
 			this->figure->food_y = -1;
+			this->count = snakeSize - 2;
+			this->figure->screen[0][15] = to_string(count%10)[0];
+			this->figure->screen[0][14] = to_string((count / 10) % 10)[0];
+			this->figure->screen[0][13] = to_string((count / 10) / 10)[0];
 		}
 	}
 
@@ -144,6 +172,8 @@ public:
 private:
 	int snakeSize;
 	int change_x, change_y;
+	int count;
+	char symbol;
 };
 
 int main()
